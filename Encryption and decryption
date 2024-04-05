@@ -1,0 +1,39 @@
+from cryptography.fernet import Fernet
+
+def generate_key():
+    # Generate a random encryption key
+    key = Fernet.generate_key()
+    return key
+
+def encrypt(plaintext, key):
+    # Initialize the Fernet cipher with the key
+    cipher_suite = Fernet(key)
+    # Encrypt the plaintext
+    ciphertext = cipher_suite.encrypt(plaintext.encode())
+    return ciphertext, key
+
+def decrypt(ciphertext, key):
+    # Initialize the Fernet cipher with the key
+    cipher_suite = Fernet(key)
+    # Decrypt the ciphertext
+    plaintext = cipher_suite.decrypt(ciphertext)
+    return plaintext.decode()
+
+# Example usage
+plaintext = input("Enter the plaintext: ")
+
+# Generate encryption key
+encryption_key = generate_key()
+
+# Encrypt the plaintext
+encrypted_text, encryption_key = encrypt(plaintext, encryption_key)
+
+print("Encrypted text:", encrypted_text.decode())
+print("Encryption key:", encryption_key.decode())
+
+# Decryption example
+decryption_key = input("Enter the decryption key: ")
+
+# Decrypt the ciphertext using the decryption key
+decrypted_text = decrypt(encrypted_text, decryption_key.encode())
+print("Decrypted text:", decrypted_text)

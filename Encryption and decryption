@@ -1,39 +1,35 @@
 from cryptography.fernet import Fernet
 
 def generate_key():
-    # Generate a random encryption key
-    key = Fernet.generate_key()
-    return key
+    return Fernet.generate_key()
 
-def encrypt(plaintext, key):
-    # Initialize the Fernet cipher with the key
-    cipher_suite = Fernet(key)
+def encrypt_message(message, key):
+    fernet = Fernet(key)
+    encrypted_message = fernet.encrypt(message.encode())
+    return encrypted_message
+
+def decrypt_message(encrypted_message, key):
+    fernet = Fernet(key)
+    decrypted_message = fernet.decrypt(encrypted_message).decode()
+    return decrypted_message
+
+def main():
+    # Generate a key
+    key = generate_key()
+
+    # Get input from user
+    plaintext = input("Enter the plaintext to encrypt: ")
+
     # Encrypt the plaintext
-    ciphertext = cipher_suite.encrypt(plaintext.encode())
-    return ciphertext, key
+    encrypted_text = encrypt_message(plaintext, key)
+    print("Encrypted message:", encrypted_text)
 
-def decrypt(ciphertext, key):
-    # Initialize the Fernet cipher with the key
-    cipher_suite = Fernet(key)
-    # Decrypt the ciphertext
-    plaintext = cipher_suite.decrypt(ciphertext)
-    return plaintext.decode()
+    # Display the encryption key
+    print("Encryption key:", key.decode())
 
-# Example usage
-plaintext = input("Enter the plaintext: ")
+    # Decrypt the encrypted message
+    decrypted_text = decrypt_message(encrypted_text, key)
+    print("Decrypted message:", decrypted_text)
 
-# Generate encryption key
-encryption_key = generate_key()
-
-# Encrypt the plaintext
-encrypted_text, encryption_key = encrypt(plaintext, encryption_key)
-
-print("Encrypted text:", encrypted_text.decode())
-print("Encryption key:", encryption_key.decode())
-
-# Decryption example
-decryption_key = input("Enter the decryption key: ")
-
-# Decrypt the ciphertext using the decryption key
-decrypted_text = decrypt(encrypted_text, decryption_key.encode())
-print("Decrypted text:", decrypted_text)
+if __name__ == "__main__":
+    main()
